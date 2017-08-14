@@ -1,0 +1,28 @@
+
+
+
+yum install -y tk-devel.x86_64 
+openssl.x86_64 
+./configure CFLAGS=-fPIC
+make altinstall
+pip install numpy
+pip install matplotlib
+
+
+https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_setup/py_setup_in_fedora/py_setup_in_fedora.html#install-opencv-python-in-fedora
+
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+      -D BUILD_PYTHON_SUPPORT=ON \
+      -D WITH_XINE=ON \
+      -D WITH_OPENGL=ON \
+      -D WITH_TBB=ON \
+      -D BUILD_EXAMPLES=ON \
+      -D BUILD_NEW_PYTHON_SUPPORT=ON \
+      -D WITH_V4L=ON \
+      -D CMAKE_INSTALL_PREFIX=~/.opencv-2.4.13.3 \
+      -D PYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python2.7 \
+      /tmp/opencv-2.4.13.3
+      
+
+ 
+ 

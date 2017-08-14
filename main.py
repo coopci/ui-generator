@@ -2,7 +2,7 @@
 import numpy as np
 from funcs import reorder_matches, drawOrderedMatches, drawMatches
 import cv2
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 import gen_html
 
 
@@ -85,7 +85,7 @@ def main():
     img2 = cv2.imread(filepath2,0) # trainImage
     kp1, kp2, reordered_good = do_sift(img1, img2)
     img4 = drawOrderedMatches(img1, kp1, img2, kp2, reordered_good)
-    plt.imshow(img4),plt.show()
+    # plt.imshow(img4),plt.show()
     gen_html.genHTML(img1, kp1, filepath1, img2, kp2, filepath2, reordered_good, "gen1.html")
 
 if __name__ == "__main__":

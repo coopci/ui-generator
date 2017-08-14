@@ -2,7 +2,7 @@
 import numpy as np
 from funcs import reorder_matches, drawOrderedMatches, drawMatches
 import cv2
-# from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
 import gen_html
 
 
@@ -10,7 +10,13 @@ MIN_MATCH_COUNT = 10
 MAX_OCCURS = 10  # 最多尝试探测这么多个。如果打图中小图出现的次数小于等于这个，那么希望可以探测对。
 
 def do_sift(img1,img2 ):
-    probed_occurs = MAX_OCCURS
+    """
+
+    :param img1:  小图
+    :param img2:  大图
+    :return:
+    """
+    probed_occurs = 0
     # Initiate SIFT detector
     sift = cv2.SIFT()
 
@@ -40,17 +46,20 @@ def do_sift(img1,img2 ):
     for g in matches:
         # if m.distance < 0.7*n.distance:
         for i in range(len(g) - 1):
-            if g[i].distance < 90.0:
+            if g[i].distance < 45.0:
                 good.append(g[i])
-                if (g[i].distance < 0.7*g[i+1].distance):
-                    probed_occurs = i + 1
+
+                if (g[i].distance < 0.95*g[i+1].distance):
+                    # good.append(g[i])
+                    if i + 1 > probed_occurs:
+                        probed_occurs = i + 1
                     break
             else:
                 break
 
     # probed_occurs=3
 
-
+    print "probed_occurs:", probed_occurs
 
     print "len(good):", len(good)
 
@@ -81,11 +90,15 @@ def do_sift(img1,img2 ):
 def main():
     filepath1 = 'button.png'
     filepath2 = 'button_in_scene5.png'
+
+    filepath1 = 'test1//185981.png'
+    filepath2 = 'test1//layout.png'
+
     img1 = cv2.imread(filepath1,0)          # queryImage
     img2 = cv2.imread(filepath2,0) # trainImage
     kp1, kp2, reordered_good = do_sift(img1, img2)
     img4 = drawOrderedMatches(img1, kp1, img2, kp2, reordered_good)
-    # plt.imshow(img4),plt.show()
+    plt.imshow(img4),plt.show()
     gen_html.genHTML(img1, kp1, filepath1, img2, kp2, filepath2, reordered_good, "gen1.html")
 
 if __name__ == "__main__":

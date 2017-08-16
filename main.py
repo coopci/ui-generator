@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from funcs import reorder_matches, drawOrderedMatches, drawMatches
+from funcs import reorder_matches, drawOrderedMatches, drawMatches, read_transparent_png
 import cv2
 from matplotlib import pyplot as plt
 import gen_html
@@ -70,7 +70,7 @@ def do_sift(img1,img2 ):
         M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
         matchesMask = mask.ravel().tolist()
 
-        h, w = img1.shape
+        h, w = img1.shape[0:2]
         pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
         dst = cv2.perspectiveTransform(pts, M)
 
@@ -91,10 +91,11 @@ def main():
     filepath1 = 'button.png'
     filepath2 = 'button_in_scene5.png'
 
-    filepath1 = 'test1//185981.png'
-    filepath2 = 'test1//layout.png'
+    filepath1 = 'test2//button.png'
+    filepath2 = 'test2//layout.png'
 
-    img1 = cv2.imread(filepath1,0)          # queryImage
+    # img1 = cv2.imread(filepath1, 0)          # queryImage
+    img1 = read_transparent_png(filepath1)
     img2 = cv2.imread(filepath2,0) # trainImage
     kp1, kp2, reordered_good = do_sift(img1, img2)
     img4 = drawOrderedMatches(img1, kp1, img2, kp2, reordered_good)

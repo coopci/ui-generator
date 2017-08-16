@@ -22,7 +22,7 @@ import mimetypes
 import re
 
 
-from funcs import reorder_matches, drawOrderedMatches, drawMatches
+from funcs import reorder_matches, drawOrderedMatches, drawMatches, read_transparent_png
 import cv2
 import gen_html
 import numpy as np
@@ -93,7 +93,7 @@ def do_sift(img1,img2 ):
         M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
         matchesMask = mask.ravel().tolist()
 
-        h, w = img1.shape
+        h, w = img1.shape[0:2]
         pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
         dst = cv2.perspectiveTransform(pts, M)
 
@@ -210,7 +210,8 @@ class SimpleHTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             filepath1 = os.path.join(task_name, "button.png")
             filepath2 = os.path.join(task_name, "layout.png")
 
-            img1 = cv2.imread(filepath1, 0)  # queryImage
+            # img1 = cv2.imread(filepath1, 0)  # queryImage
+            img1 = read_transparent_png(filepath1)
             img2 = cv2.imread(filepath2, 0)  # trainImage
             kp1, kp2, reordered_good = do_sift(img1, img2)
             img4 = drawOrderedMatches(img1, kp1, img2, kp2, reordered_good)
